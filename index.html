@@ -4,76 +4,33 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>replace.js demo</title>
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> -->
 </head>
 <body>
 	<h1>Tada</h1>
-<a href="/test">Link</a>
-	<p>What the heck were you thinking?  What the heck were you thinking? What the heck were you thinking? What the heck were you thinking? What the heck were you thinking? What the heck were you thinking? What the heck were you thinking? What the heck were you thinking? What the heck were you thinking? What the heck were you thinking? What the heck were you thinking? <span class="replace">never this.</span> Dog, that's awesome. Dog, that's awesome. Dog, that's awesome. Dog, that's awesome. Dog, that's awesome.</p>
+    <a href="/test">Link</a>
+	<p>What the heck were you thinking?  What the heck were you thinking? What the heck were you thinking? What the heck were you thinking? What the heck were you thinking? What the heck were you thinking? What the heck were you thinking? What the heck were you thinking? What the heck were you thinking? What the heck were you thinking? What the heck were you thinking? <span id="replace">never this.</span> Dog, that's awesome. Dog, that's awesome. Dog, that's awesome. Dog, that's awesome. Dog, that's awesome.</p>
 
-	<script type="text/javascript" src="replace.js"></script>
+	<script type="text/javascript" src="src/replace.js"></script>
 	<script>
-var rawSentences = [{
-            "noun": "Columbia",
-            "obj": "Computer Science",
-            "prep": "at",
-            "verb": "study"
-        },
-        {
-            "noun": "Columbia",
-            "obj": "jazz",
-            "prep": "at",
-            "verb": "study"
-        },
-        {
-            "noun": "Columbia",
-            "obj": "design",
-            "prep": "at",
-            "verb": "study"
-        },
-        {
-            "noun": "New York",
-            "obj": "design",
-            "prep": "in",
-            "verb": "study"
-        },
-        {
-            "noun": "fun",
-            "obj": "web sites",
-            "prep": "for",
-            "verb": "design"
-        },
-        {
-            "noun": "tech clubs",
-            "obj": "web sites",
-            "prep": "about",
-            "verb": "design"
-        },
-        {
-            "noun": "music",
-            "obj": "apps",
-            "prep": "about",
-            "verb": "build"
-        },
-        {
-            "noun": "Twitter",
-            "obj": "apps",
-            "prep": "about",
-            "verb": "build"
-        },
-        {
-            "noun": "code",
-            "obj": "experiences",
-            "prep": "with",
-            "verb": "build"
-        },
-        {
-            "noun": "Python",
-            "obj": "apps",
-            "prep": "with",
-            "verb": "build"
-        }];
-Replace.init(rawSentences, {classname: "replace", interval: 2000, speed:400});
+    var rawSentences = [
+        "I study Computer Science at Columbia",
+        "I study jazz at Columbia",
+        "I study design at Columbia",
+        "I study design in New York",
+        "I design web sites for fun",
+        "I design web sites about tech clubs",
+        "I build apps about music",
+        "I build apps about Twitter",
+        "I build experiences with code",
+        "I build apps with Python",
+    ];
+    var Replace = new window.Replace();
+    var input = ["Hello there friend"];
+    console.log(input, Replace);//, Replace._parseSentences);
+    // var output = Replace._parseSentences(input);
+    console.log("output:", output)
+    // Replace(rawSentences, {container: "replace", interval: 2000, speed:400});
 
 	</script>
 </body>

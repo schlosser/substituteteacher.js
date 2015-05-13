@@ -1,0 +1,4 @@
+{
+	"jasmine": true,
+	"predef": [ "Replace" ]
+}
