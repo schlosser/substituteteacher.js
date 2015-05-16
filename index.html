@@ -8,13 +8,13 @@
 </head>
 <body>
 	<h1>Tada</h1>
-    <a href="/test">Link</a>
-	<p>What the heck were you thinking?  What the heck were you thinking? What the heck were you thinking? What the heck were you thinking? What the heck were you thinking? What the heck were you thinking? What the heck were you thinking? What the heck were you thinking? What the heck were you thinking? What the heck were you thinking? What the heck were you thinking? <span id="replace">never this.</span> Dog, that's awesome. Dog, that's awesome. Dog, that's awesome. Dog, that's awesome. Dog, that's awesome.</p>
-
+	<span id="replace">never this.</span>
 	<script type="text/javascript" src="src/replace.js"></script>
 	<script>
+    "use strict";
+    document.addEventListener("DOMContentLoaded", function() {
     var rawSentences = [
-        "I study Computer Science at Columbia",
+        "I study CS at Columbia",
         "I study jazz at Columbia",
         "I study design at Columbia",
         "I study design in New York",
@@ -23,14 +23,15 @@
         "I build apps about music",
         "I build apps about Twitter",
         "I build experiences with code",
-        "I build apps with Python",
+        "I build apps with Python"
     ];
-    var Replace = new window.Replace();
-    var input = ["Hello there friend"];
-    console.log(input, Replace);//, Replace._parseSentences);
-    // var output = Replace._parseSentences(input);
-    console.log("output:", output)
+    var Replace = new window.Replace(rawSentences, {
+
+    });
+    Replace.run();
     // Replace(rawSentences, {container: "replace", interval: 2000, speed:400});
+
+    });
 
 	</script>
 </body>

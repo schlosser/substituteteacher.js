@@ -8,5 +8,5 @@ function getReplaceInstance(id) {
 		div.id = id;
 		document.body.appendChild(div);
 	}
-	return new window.Replace();
+	return new window.Replace([]);
 }
