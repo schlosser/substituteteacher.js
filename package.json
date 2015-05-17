@@ -8,8 +8,7 @@
   },
   "devDependencies": {
     "grunt": "~0.4.2",
-    "grunt-contrib-jasmine": "^0.8.2",
-    "grunt-contrib-requirejs": "^0.4.4"
+    "grunt-contrib-jasmine": "~0.8.2"
   },
   "author": "Dan Schlosser",
   "license": "MIT"
