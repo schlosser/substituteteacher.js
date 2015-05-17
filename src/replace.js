@@ -2,8 +2,35 @@
 
   "use strict";
 
+  /**
+   * Compare function for sorting annotated actions, used to fine the pair of
+   * sentences with the minimum edit distance.
+   *
+   * @param {Object} annotatedAction1 - the annotated action in question
+   * @param {Object} annotatedAction1.action - the action in question
+   * @param {int} annotatedAction1.action.cost - the action's cost
+   * @param {Object} annotatedAction2 - the annotated action to compare to
+   * @param {Object} annotatedAction2.action - the action to compare to
+   * @param {int} annotatedAction1.action.cost - the action to compare to's cost
+   *
+   * @return {int} difference in cost - positive if 1 > 2, negative if 2 > 1,
+   *                                    0 if 1 === 2
+   */
   function _sortAnnotatedAction(annotatedAction1, annotatedAction2) {
     return annotatedAction1.action.cost - annotatedAction2.action.cost;
+  }
+
+  /**
+   * Parse the array of raw sentence strings into an array of arrays of words.
+   *
+   * @param {string[]} rawSentences the sentences to parse
+   * @returns {string[][]} sentences the
+   */
+  function _parseSentences(rawSentences) {
+    if (!rawSentences || typeof rawSentences !== "object") {
+      throw "rawSentences must be an array of strings.";
+    }
+    return rawSentences.map(_parseSentence);
   }
 
   /**
@@ -58,6 +85,11 @@
     return components;
   }
 
+  /**
+   * Find the CSS transition end event that we should listen for.
+   *
+   * @returns {string} t - the transition string
+   */
   function _whichTransitionEndEvent() {
     var t;
     var el = document.createElement("fakeelement");
@@ -77,6 +109,15 @@
     }
   }
 
+  /**
+   * Generate the HTML associated with each word.
+   *
+   * @param {string} namespace - the namespace associated with this library,
+   *                             which should be prepended to classnames.
+   * @param {int} idx - the index of this word in the sentence.
+   *
+   * @returns {string} template - the HTML to inject.
+   */
   function _wordTemplate(namespace, idx) {
     return (
       "<div class=\"idx-" + idx + " " + namespace + "-word\">" +
@@ -86,6 +127,14 @@
     );
   }
 
+  /**
+   * Inject CSS needed to make the transitions work in the <head>.
+   *
+   * @param {string} namespace - the namespace associated with this library,
+   *                             which should be prepended to classnames.
+   * @param {number} transitionSpeed - the speed for CSS transitions.
+   * @param {number} height - the outerHeight of the wrapper.
+   */
   function _injectStyle(namespace, transitionSpeed, height) {
     var css =
       "." + namespace + "-invisible { visibility: hidden; }\n" +
@@ -139,23 +188,49 @@
     head.appendChild(style);
   }
 
-  /********************************* Replace *********************************/
+  /***************************************************************************
+   *                                                                         *
+   *                                Replace()                                *
+   *                                                                         *
+   ***************************************************************************/
 
+  /**
+   * Replace() - the exposed API for replace.js
+   *
+   * @param {string[]} rawSentences - An array of sentences to loop between.
+   * @param {Object} options - Configuration options
+   * @param {string} options.containerId - id of the injection point for HTML
+   *                                       default: "replace"
+   * @param {string} options.namespace - namespace to prepend to classes used
+   *                                     internally
+   *                                     default: "replace"
+   * @param {int} options.interval - number of milliseconds between each change
+   *                                 default: 5000
+   * @param {int} options.speed - number of milliseconds that each step of the
+   *                              animation should take
+   *                              default: 200
+   * @param {bool} options.verbose - true to enable console logging
+   *                                 default: false
+   * @param {bool} options.random - true if the first sentence to appear should
+   *                                be random
+   *                                default: false
+   * @param {bool} options.best - true if the sentences should be ordered to
+   *                              minimize the number of changes performed
+   *                              default: true
+   */
   function Replace(rawSentences, options) {
     var self = this;
     var opts = options || {};
     self.settings = {
-      print: false,
-      container: opts.container || "replace",
+      containerId: opts.containerId || "replace",
       namespace: opts.namespace || "replace",
-      interval: opts.interval || 1000,
-      speed: opts.speed || 100,
+      interval: opts.interval || 5000,
+      speed: opts.speed || 200,
       verbose: (opts.verbose !== undefined) ? opts.verbose : false,
-      animation: (opts.animation !== undefined) ? opts.animation : true,
       random: (opts.random !== undefined) ? opts.random : false,
       best: (opts.best !== undefined) ? opts.best : true,
     };
-    self.wrapper = document.getElementById(self.settings.container);
+    self.wrapper = document.getElementById(self.settings.containerId);
     _injectStyle(self.settings.namespace, self.settings.speed / 1000, self.wrapper.offsetHeight);
     self.highestTimeoutId = 0;
     self.currentState = null;
@@ -164,33 +239,29 @@
     self.visibleClass = " ." + self.settings.namespace + "-visible";
     self.wrapperSelector = "#" + self.settings.namespace;
     self._setupContainer();
-    self._setSentences(self._parseSentences(rawSentences));
+    self._setSentences(_parseSentences(rawSentences));
     return this;
   }
 
+  /**
+   * Find the container for the sentences, empty out any HTML that might be
+   * inside, and then give it the namespace class.  It will be the root element
+   * for any changes we might make.
+   */
   Replace.prototype._setupContainer = function() {
     var self = this;
-    var container = document.getElementById(self.settings.container);
+    var container = document.getElementById(self.settings.containerId);
     if (!container) {
-      throw "Cannot find element with id:" + self.settings.container;
+      throw "Cannot find element with id:" + self.settings.containerId;
     }
     container.innerHTML = "";
     container.className = self.settings.namespace;
   };
 
   /**
-   * Parse the array of raw sentence strings into an array of arrays of words.
-   *
-   * @param {string[]} rawSentences the sentences to parse
-   * @returns {string[][]} sentences the
+   * Run the sentence loop.  If we haven't successfully populated self.actions,
+   * we delay the running until we have.
    */
-  Replace.prototype._parseSentences = function(rawSentences) {
-    if (!rawSentences || typeof rawSentences !== "object") {
-      throw "rawSentences must be an array of strings.";
-    }
-    return rawSentences.map(_parseSentence);
-  };
-
   Replace.prototype.run = function() {
     var self = this;
 
@@ -201,7 +272,6 @@
       }, 20);
     }
 
-    console.log("ACTIONS: ", self.actions);
     var action = self._computeActionsToChange([], self.actions[0].from);
     if (!action) {
       console.log(action);
@@ -432,6 +502,15 @@
     return actions;
   };
 
+  /**
+   * Generate self.actions.  If self.settings.best is true, we order the
+   * actions to rotate between sentences with minimal insertions, removals, and
+   * changes.  If self.settings.random is true, the sentences will appear in a
+   * random order.  If both are set, the sequence will be optimal, but will
+   * start from a random position in the sequence.
+   *
+   * @param {string[][]} sentences - sentences to be converted to actions
+   */
   Replace.prototype._setSentences = function(sentences) {
     var self = this;
     var i, j, prevIndex;
@@ -477,8 +556,6 @@
 
       var first = table[0][0].fromIndex;
 
-      console.log("it's a table: ", table);
-
       // Start with table[0][0], the lowest cost action.  Then, find the lowest
       // cost actions starting from table[0][0].toIndex, and so forth.
       for (i = 0; i < sentences.length; i++) {
@@ -516,6 +593,11 @@
     }
   };
 
+  /**
+   * Called in an infinite setTimeout loop.  Dequeues an action, performs it,
+   * and enqueues it onto the end of the self.actions array.
+   * Then calls setTimeout on itself, with self.settings.interval.
+   */
   Replace.prototype._sentenceLoop = function() {
     var self = this;
     var nextAction = self.actions.shift();
@@ -523,7 +605,6 @@
       console.log(nextAction, self.actions);
       throw "returned null action";
     }
-    console.log("-------------------------------");
     self._applyAction(nextAction);
     self.actions.push(nextAction);
     clearTimeout(self.highestTimeoutId);
@@ -532,6 +613,10 @@
     }, self.settings.interval);
   };
 
+  /**
+   * Apply `action`, by performing the necessary replacements, removals, keeps,
+   * and insertions.
+   */
   Replace.prototype._applyAction = function(action) {
     var self = this;
     action.replace.map(function(replaceAction) {
@@ -546,6 +631,12 @@
     self._performInsertions(action.insert);
   };
 
+  /**
+   * Removes the word from the sentence.
+   *
+   * @param {Object} removeAction - the removal to perform
+   * @param {int} removeAction.fromIndex - the index of the existing word
+   */
   Replace.prototype._removeAction = function(removeAction) {
     var self = this;
     var fromIndexClass = "idx-" + removeAction.fromIndex;
@@ -557,9 +648,16 @@
       newText: "" // We'll animate to zero width
     };
     if (self.settings.verbose) { console.log("remove", animationContext); }
-    return new Animation("remove", self, animationContext);
+    new Animation("remove", self, animationContext);
   };
 
+  /**
+   * Perform the given insertions
+   *
+   * @param {Object[]} insertions - the insertions to perform
+   * @param {int} insertions.toIndex - the index of the element to add
+   * @param {string} insertions.toWord - the word to insert
+   */
   Replace.prototype._performInsertions = function(insertions) {
     var self = this;
     setTimeout(function () {
@@ -591,6 +689,15 @@
     }, self.settings.speed);
   };
 
+  /**
+   * Perform the given replacement
+   *
+   * @param {Object} replaceAction - the replacement to perform
+   * @param {int} replaceAction.fromIndex - the index of the element to change
+   * @param {string} replaceAction.fromWord - the word to replace
+   * @param {int} replaceAction.toIndex - the index to give the new word
+   * @param {string} replaceAction.toWord - the word to replace with
+   */
   Replace.prototype._replaceAction = function(replaceAction) {
     var self = this;
     var fromIndexClass = "idx-" + replaceAction.fromIndex;
@@ -604,9 +711,16 @@
     };
     console.log("REPLACE: ", animationContext);
     if (self.settings.verbose) { console.log("replace", animationContext); }
-    return new Animation("replace", self, animationContext);
+    new Animation("replace", self, animationContext);
   };
 
+  /**
+   * Perform the given keep action.
+   *
+   * @param {Object} keepAction - the keep action to perform
+   * @param {int} keepAction.fromIndex - the index of the word to re-label
+   * @param {int} keepAction.toIndex - the index to label this word
+   */
   Replace.prototype._keepAction = function(keepAction) {
     var self = this;
     var fromIndexClass = "idx-" + keepAction.fromIndex;
@@ -617,11 +731,28 @@
     };
 
     if (self.settings.verbose) { console.log("keep", animationContext); }
-    return new Animation("keep", self, animationContext);
+    new Animation("keep", self, animationContext);
   };
 
-  /******************************** Animation ********************************/
+  /***************************************************************************
+   *                                                                         *
+   *                               Animation()                               *
+   *                                                                         *
+   ***************************************************************************/
 
+  /**
+   * A privately used class for creating animations.  It allows for animations
+   * to have state associated with them, without passing arguments to callback
+   * functions.
+   *
+   * @param {string} animation - one of "remove", "replace", "insert", or
+   *                             "keep".  Indicates the animation to perform,
+   *                             and forcasts the contents of animationContext.
+   * @param {Object} replace - the instance of the Replace class associated
+   *                           with this animation.
+   * @param {Object} animationContext - any context that is needed by the
+   *                                    passed animation.
+   */
   function Animation(animation, replace, animationContext) {
     var self = this;
     self.replace = replace;
@@ -656,6 +787,9 @@
     self.steps[0](); // dequeue an run the first task.
   }
 
+  /**
+   * Change the index class of the word.
+   */
   Animation.prototype._reIndex = function() {
     var self = this;
     var ctx = self.ctx;
@@ -672,12 +806,15 @@
     }
   };
 
+  /**
+   * Fade out this word
+   */
   Animation.prototype._fadeOut = function() {
     var self = this;
     var ctx = self.ctx;
     if (self.replace.settings.verbose) { console.log("_fadeOut"); }
 
-    /* Hold the container width, and fade out */
+    /* Hold the containerId width, and fade out */
     ctx.visible.className += self.animatingClass;
     self.steps.shift(); // pop _fadeOut
     ctx.visible.addEventListener(self.transitionEnd, self.steps[0], false);
@@ -685,6 +822,9 @@
     ctx.visible.style.opacity = 0;
   };
 
+  /**
+   * Set with width of this word to the width of ctx.newText.
+   */
   Animation.prototype._setWidth = function() {
     var self = this;
     var ctx = self.ctx;
@@ -705,6 +845,9 @@
     }, 5);
   };
 
+  /**
+   * Remove this element from the DOM
+   */
   Animation.prototype._removeElement = function() {
     var self = this;
     var ctx = self.ctx;
@@ -713,8 +856,11 @@
     /* Remove this word */
     ctx.invisible.removeEventListener(self.transitionEnd, self.steps[0], false);
     self.replace.wrapper.removeChild(ctx.word);
-  }
+  };
 
+  /**
+   * Set the text of this element to ctx.newText and fade it in.
+   */
   Animation.prototype._setTextAndFadeIn = function() {
     var self = this;
     var ctx = self.ctx;
@@ -730,6 +876,9 @@
     ctx.visible.style.opacity = 1;
   };
 
+  /**
+   * Remove animation classes, remove event listeners, and set widths to "auto"
+   */
   Animation.prototype._cleanUp = function() {
     var self = this;
     var ctx = self.ctx;
@@ -742,6 +891,15 @@
     ctx.invisible.style.width = "auto";
   };
 
+  /**
+   * Find the width that an element with a given tag and classes would have if
+   * it contained the passed text.
+   *
+   * @param {string} text - the text to get the width of
+   * @param {string} tag - the tag that the text will be put in
+   * @param {string[]} classes - an array of classes associated with this
+   *                             element.
+   */
   Animation.prototype._calculateWordWidth = function(text, tag, classes) {
     var self = this;
     var elem = document.createElement(tag);
