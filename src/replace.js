@@ -21,19 +21,6 @@
   }
 
   /**
-   * Parse the array of raw sentence strings into an array of arrays of words.
-   *
-   * @param {string[]} rawSentences the sentences to parse
-   * @returns {string[][]} sentences the
-   */
-  function _parseSentences(rawSentences) {
-    if (!rawSentences || typeof rawSentences !== "object") {
-      throw "rawSentences must be an array of strings.";
-    }
-    return rawSentences.map(_parseSentence);
-  }
-
-  /**
    * Parse the raw sentence into an array of words.
    *
    * Separate the sentence by spaces, and then go along each word and pull
@@ -217,6 +204,8 @@
    * @param {bool} options.best - true if the sentences should be ordered to
    *                              minimize the number of changes performed
    *                              default: true
+   * @param {bool} options._testing - true if testing.  sentences will be
+   *                                  ignored
    */
   function Replace(rawSentences, options) {
     var self = this;
@@ -229,6 +218,7 @@
       verbose: (opts.verbose !== undefined) ? opts.verbose : false,
       random: (opts.random !== undefined) ? opts.random : false,
       best: (opts.best !== undefined) ? opts.best : true,
+      _testing: (opts._testing !== undefined) ? opts._testing : false,
     };
     self.wrapper = document.getElementById(self.settings.containerId);
     _injectStyle(self.settings.namespace, self.settings.speed / 1000, self.wrapper.offsetHeight);
@@ -239,9 +229,24 @@
     self.visibleClass = " ." + self.settings.namespace + "-visible";
     self.wrapperSelector = "#" + self.settings.namespace;
     self._setupContainer();
-    self._setSentences(_parseSentences(rawSentences));
+    if (!self.settings._testing) {
+      self._setSentences(_parseSentences(rawSentences));
+    }
     return this;
   }
+
+  /**
+   * Parse the array of raw sentence strings into an array of arrays of words.
+   *
+   * @param {string[]} rawSentences the sentences to parse
+   * @returns {string[][]} sentences the
+   */
+  Replace.prototype._parseSentences = function(rawSentences) {
+    if (!rawSentences || typeof rawSentences !== "object") {
+      throw "rawSentences must be an array of strings.";
+    }
+    return rawSentences.map(_parseSentence);
+  };
 
   /**
    * Find the container for the sentences, empty out any HTML that might be
