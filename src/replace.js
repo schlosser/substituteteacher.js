@@ -230,7 +230,7 @@
     self.wrapperSelector = "#" + self.settings.namespace;
     self._setupContainer();
     if (!self.settings._testing) {
-      self._setSentences(_parseSentences(rawSentences));
+      self._setSentences(self._parseSentences(rawSentences));
     }
     return this;
   }

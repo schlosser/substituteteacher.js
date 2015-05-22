@@ -11,8 +11,16 @@ module.exports = function (grunt) {
           helpers: "test/*Helper.js"
         }
       }
+    },
+    uglify: {
+      my_target: {
+        files: {
+          "src/replace.min.js": ["src/replace.js"]
+        }
+      }
     }
   });
   grunt.loadNpmTasks("grunt-contrib-jasmine");
+  grunt.loadNpmTasks("grunt-contrib-uglify");
   grunt.registerTask("default", ["less"]);
 };
