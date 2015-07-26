@@ -9,6 +9,8 @@ layout: default
 </section>
 <section>
   <div class="content">
+    <h4><code>substituteteacher.js</code> is a JavaScript library that lets you substitute
+      sentences for each other, swapping only the words necessary.</h4>
     <h3><span class="purple">Get Subbing</span></h3>
 {% highlight html %}
 
@@ -110,20 +112,11 @@ var sub = new Sub([
 
 <script src="src/substituteteacher.min.js"></script>
 <script type="text/javascript">
-  var opts = {
-    containerId: "sub",
-    namespace: "sub",
-    interval: 5000,
-    speed: 200,
-    verbose: false,
-    random: false,
-    best: true
-  };
-  var sub = new Sub([
+  new Sub([
       "A daring JavaScript library for subsitute teachers",
       "A hilarious JavaScript library for awesome taglines",
       "A svelt JavaScript library for sweet taglines",
       "A badass JavaScript library for sliding fun",
       "A JavaScript library for word substitution",
-  ], opts).run();
+  ]).run();
 </script>
