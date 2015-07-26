@@ -29,8 +29,8 @@ p, .p {
     margin-bottom: 1rem;
     font-family: $sans;
     font-weight: $regular;
-    font-size: 1rem;
-    line-height: 1.4rem;
+    font-size: 1.2rem;
+    line-height: 1.6rem;
     a {
         color: $purple;
         &:hover {
@@ -118,6 +118,9 @@ h3, .h3 {
     span {
         padding: 0.5rem;
     }
+    & + h3 {
+        margin-top: 0;
+    }
 }
 
 h4, .h4 {
@@ -125,7 +128,7 @@ h4, .h4 {
     font-weight: $regular;
     font-size: 1.5rem;
     line-height: 2.25rem;
-    margin-bottom: 3rem;
+    margin-bottom: 5rem;
     code {
         background-color: $white;
     }
@@ -137,6 +140,7 @@ h5, .h5 {
     font-size: 1.5rem;
     line-height: 2rem;
     margin-bottom: 1rem;
+    margin-top: 3rem;
     span {
         padding: 0.5rem;
     }
@@ -284,7 +288,7 @@ table {
     }
     thead th, tfoot td {
         color: $black;
-        background-color: #BBB;
+        background-color: $gray;
     }
     tbody {
         tr:not(:last-child) {
