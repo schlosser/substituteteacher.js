@@ -1,0 +1,67 @@
+/*************************************************
+ * utils.scss - Dan Schlosser <dan@schlosser.io> *
+ *                                               *
+ * Useful mixins and classes for use everywhere. *
+ *************************************************/
+
+@import 'media_queries';
+@import 'colors';
+
+@mixin clearfix {
+    &:after {
+        content: " "; /* Older browser do not support empty content */
+        visibility: hidden;
+        display: block;
+        height: 0;
+        clear: both;
+    }
+}
+
+.right {
+    float: right;
+}
+
+.hidden {
+    display: none !important;
+}
+
+@mixin placeholder {
+    &::-webkit-input-placeholder {
+        @content;
+    }
+    &:-moz-placeholder {
+        @content;
+    }
+    &::-moz-placeholder {
+        @content;
+    }
+    &:-ms-input-placeholder {
+        @content;
+    }
+}
+
+@mixin transform($rule) {
+    -webkit-transform: $rule;
+       -moz-transform: $rule;
+         -o-transform: $rule;
+            transform: $rule;
+}
+
+@mixin transition($speed, $delay: 0s, $function: ease, $props: all) {
+    -webkit-transition: $speed $delay $function $props;
+       -moz-transition: $speed $delay $function $props;
+         -o-transition: $speed $delay $function $props;
+            transition: $speed $delay $function $props;
+}
+
+@mixin border-box {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.only-mobile { display: none; }
+@media only screen and (max-width: $phone-max) {
+    .only-mobile { display: initial; }
+    .no-mobile { display: none; }
+}

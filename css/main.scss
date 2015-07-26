@@ -2,51 +2,55 @@
 # Only the main Sass file needs front matter (the dashes are enough)
 ---
 @charset "utf-8";
+@import "base";
+@import 'navbar';
 
+$content-width: 60rem;
 
-
-// Our variables
-$base-font-family: Helvetica, Arial, sans-serif;
-$base-font-size:   16px;
-$small-font-size:  $base-font-size * 0.875;
-$base-line-height: 1.5;
-
-$spacing-unit:     30px;
-
-$text-color:       #111;
-$background-color: #fdfdfd;
-$brand-color:      #2a7ae2;
-
-$grey-color:       #828282;
-$grey-color-light: lighten($grey-color, 40%);
-$grey-color-dark:  darken($grey-color, 25%);
-
-// Width of the content area
-$content-width:    800px;
-
-$on-palm:          600px;
-$on-laptop:        800px;
-
-
-
-// Using media queries with like this:
-// @include media-query($on-palm) {
-//     .wrapper {
-//         padding-right: $spacing-unit / 2;
-//         padding-left: $spacing-unit / 2;
-//     }
-// }
-@mixin media-query($device) {
-    @media screen and (max-width: $device) {
-        @content;
-    }
+body {
+	background-color: $ultra-light-gray;
 }
 
+.content {
+	width: 100%;
+	max-width: $content-width;
+	@include border-box;
+	padding: 0 1rem;
+	margin: 0 auto;
 
+}
 
-// Import partials from `sass_dir` (defaults to `_sass`)
-@import
-        "base",
-        "layout",
-        "syntax-highlighting"
-;
+.install {
+	border: 1px solid $white;
+	padding: 1rem;
+	@extend .h3;
+	float: right;
+}
+
+section {
+	padding: 5rem 0;
+
+	&:not(.hero) + section {
+		padding-top: 0;
+	}
+
+	&.hero {
+		@extend .purple;
+		padding: 10rem 0;
+	}
+}
+
+footer {
+	background-color: $dark-purple;
+	color: $white;
+	padding: 2rem 0;
+
+	p {
+		display: inline-block;
+		margin: 0;
+	}
+	a, a:hover {
+		color: $white;
+        border-bottom: 1px solid $white;
+    }
+}

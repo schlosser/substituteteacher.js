@@ -1,0 +1,44 @@
+/**************************************************
+ * navbar.scss - Dan Schlosser <dan@schlosser.io> *
+ *                                                *
+ * Note that this file only imports 'base' and    *
+ * nothing else.  This allows it to have access   *
+ * to all the necessary mixins and variables,     *
+ * without creating import loops.				  *
+ **************************************************/
+
+@import 'base';
+@import 'colors';
+
+nav {
+	height: 3rem;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+
+	ul {
+		display: inline-block;
+		&.right {
+			background-color: $purple;
+		}
+
+		li {
+			margin: 0;
+			display: inline-block;
+			height: 3rem;
+			line-height: 1rem;
+			padding: 1rem;
+			@include border-box;
+
+			a, a:hover {
+				color: $white;
+			}
+		}
+	}
+
+	&.active-tab-home .tab-home,
+	&.active-tab-typography .tab-typography {
+		border-bottom: 3px solid $white;
+	}
+}
