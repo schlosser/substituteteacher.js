@@ -11,7 +11,7 @@ substituteteacher.js is easy to use. Add the script to your page, provide a targ
 
 #### Step 0: Download
 
-[Download the latest release](https://github.com/danrschlosser/substituteteacher.js/releases/download/v0.1/substituteteacher.min.js) or clone the repo:
+[Download the latest release](https://github.com/danrschlosser/substituteteacher.js/releases/download/v0.2/substituteteacher.min.js) or clone the repo:
 
 ```bash
 $ git clone git@github.com:danrschlosser/substituteteacher.js
