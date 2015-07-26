@@ -803,7 +803,7 @@
 
     // Perform substitution if needed
     console.log("reIndexing ", ctx.word, " from ",  ctx.fromIndexClass, " to ", ctx.toIndexClass);
-    ctx.word.className = ctx.word.className.sub(ctx.fromIndexClass, ctx.toIndexClass);
+    ctx.word.className = ctx.word.className.replace(ctx.fromIndexClass, ctx.toIndexClass);
 
     // run next step if there is one
     self.steps.shift(); // pop _reIndex
@@ -836,7 +836,7 @@
     var ctx = self.ctx;
     if (self.sub.settings.verbose) { console.log("_setWidth"); }
     /* Animate the width */
-    ctx.visible.className = ctx.visible.className.sub(self.animatingClass, "");
+    ctx.visible.className = ctx.visible.className.replace(self.animatingClass, "");
     ctx.invisible.className += self.animatingClass;
     ctx.visible.removeEventListener(self.transitionEnd, self.steps[0], false);
     self.steps.shift(); // pop _setWidth
@@ -872,7 +872,7 @@
     var ctx = self.ctx;
     if (self.sub.settings.verbose) { console.log("_setTextAndFadeIn"); }
     /* Sub the text then fade in */
-    ctx.invisible.className = ctx.invisible.className.sub(self.animatingClass, "");
+    ctx.invisible.className = ctx.invisible.className.replace(self.animatingClass, "");
     ctx.visible.className += self.animatingClass;
     ctx.invisible.removeEventListener(self.transitionEnd, self.steps[0], false);
     self.steps.shift(); // pop _setTextAndFadeIn
@@ -891,8 +891,8 @@
     if (self.sub.settings.verbose) { console.log("_cleanUp"); }
 
     /* Clean Up */
-    ctx.invisible.className = ctx.invisible.className.sub(self.animatingClass, "");
-    ctx.visible.className = ctx.visible.className.sub(self.animatingClass, "");
+    ctx.invisible.className = ctx.invisible.className.replace(self.animatingClass, "");
+    ctx.visible.className = ctx.visible.className.replace(self.animatingClass, "");
     ctx.visible.removeEventListener(self.transitionEnd, self.steps[0], false);
     ctx.invisible.style.width = "auto";
   };
