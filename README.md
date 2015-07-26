@@ -1,17 +1,19 @@
-substituteteacher.js
-==========
+substituteteacher.js ([demo][sub])
+===========================
 
 [![Build status](https://travis-ci.org/danrschlosser/substituteteacher.js.svg)](https://travis-ci.org/danrschlosser/substituteteacher.js)
 
-substituteteacher.js will rotate through a series of sentences, transitioning between each one.
+[![Substitute Teacher](http://static.schlosser.io/ss/sub/sub.gif)][sub]
+
+`substituteteacher.js` will rotate through a series of sentences, transitioning between each one.
 
 ## Quick Start
 
-substituteteacher.js is easy to use. Add the script to your page, provide a target container and call `run()`.
+`substituteteacher.js` is easy to use. Add the script to your page, provide a target container and call `run()`.
 
 #### Step 0: Download
 
-[Download the latest release](https://github.com/danrschlosser/substituteteacher.js/releases/download/v0.2/substituteteacher.min.js) or clone the repo:
+[Download the latest release][download] or clone the repo:
 
 ```bash
 $ git clone git@github.com:danrschlosser/substituteteacher.js
@@ -78,3 +80,5 @@ var sub = new Sub([
 
 Starts the rotation between sentences.
 
+[download]: https://github.com/danrschlosser/substituteteacher.js/releases/download/v0.2/substituteteacher.min.js
+[sub]: http://danrschlosser.github.io/substituteteacher.js/
