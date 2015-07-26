@@ -2,5 +2,5 @@
 	"browser": true,
 	"devel": true,
 	"jasmine": true,
-	"predef": [ "Replace" ]
+	"predef": [ "Sub" ]
 }

@@ -5,7 +5,7 @@ module.exports = function (grunt) {
   grunt.initConfig({
     jasmine: {
       pivotal: {
-        src: "src/replace.js",
+        src: "src/substituteteacher.js",
         options: {
           specs: "test/*Spec.js",
           helpers: "test/*Helper.js"
@@ -15,7 +15,7 @@ module.exports = function (grunt) {
     uglify: {
       my_target: {
         files: {
-          "src/replace.min.js": ["src/replace.js"]
+          "src/substituteteacher.min.js": ["src/substituteteacher.js"]
         }
       }
     }

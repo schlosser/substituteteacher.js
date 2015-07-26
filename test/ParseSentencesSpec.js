@@ -1,8 +1,8 @@
-/* global getReplaceInstance */
+/* global getSubInstance */
 "use strict";
 
-describe("Replace._parseSentences works as expected ", function() {
-  var Replace = getReplaceInstance();
+describe("Sub._parseSentences works as expected ", function() {
+  var Sub = getSubInstance();
 
   var testCases = [
     {
@@ -44,7 +44,7 @@ describe("Replace._parseSentences works as expected ", function() {
 
   testCases.forEach(function(testCase) {
     it(testCase.description, function() {
-      expect(Replace._parseSentences([testCase.in])).toEqual([testCase.out]);
+      expect(Sub._parseSentences([testCase.in])).toEqual([testCase.out]);
     });
   });
 });

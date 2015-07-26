@@ -108,8 +108,9 @@
   function _wordTemplate(namespace, idx) {
     return (
       "<div class=\"idx-" + idx + " " + namespace + "-word\">" +
-      "  <span class=\"" + namespace + "-visible\" style=\"opacity: 0\"></span>" +
-      "  <span class=\"" + namespace + "-invisible\" style=\"width: 0px\"></span>" +
+      "<span class=\"" + namespace + "-visible\" style=\"opacity: 0\"></span>" +
+      "<span class=\"" + namespace + "-invisible\" style=\"width: 0px\"></span>" +
+      "<span>&nbsp;</span>" +
       "</div>"
     );
   }
@@ -177,20 +178,20 @@
 
   /***************************************************************************
    *                                                                         *
-   *                                Replace()                                *
+   *                                  Sub()                                  *
    *                                                                         *
    ***************************************************************************/
 
   /**
-   * Replace() - the exposed API for replace.js
+   * Sub() - the exposed API for substituteteacher.js
    *
    * @param {string[]} rawSentences - An array of sentences to loop between.
    * @param {Object} options - Configuration options
    * @param {string} options.containerId - id of the injection point for HTML
-   *                                       default: "replace"
+   *                                       default: "sub"
    * @param {string} options.namespace - namespace to prepend to classes used
    *                                     internally
-   *                                     default: "replace"
+   *                                     default: "sub"
    * @param {int} options.interval - number of milliseconds between each change
    *                                 default: 5000
    * @param {int} options.speed - number of milliseconds that each step of the
@@ -207,12 +208,12 @@
    * @param {bool} options._testing - true if testing.  sentences will be
    *                                  ignored
    */
-  function Replace(rawSentences, options) {
+  function Sub(rawSentences, options) {
     var self = this;
     var opts = options || {};
     self.settings = {
-      containerId: opts.containerId || "replace",
-      namespace: opts.namespace || "replace",
+      containerId: opts.containerId || "sub",
+      namespace: opts.namespace || "sub",
       interval: opts.interval || 5000,
       speed: opts.speed || 200,
       verbose: (opts.verbose !== undefined) ? opts.verbose : false,
@@ -241,7 +242,7 @@
    * @param {string[]} rawSentences the sentences to parse
    * @returns {string[][]} sentences the
    */
-  Replace.prototype._parseSentences = function(rawSentences) {
+  Sub.prototype._parseSentences = function(rawSentences) {
     if (!rawSentences || typeof rawSentences !== "object") {
       throw "rawSentences must be an array of strings.";
     }
@@ -253,7 +254,7 @@
    * inside, and then give it the namespace class.  It will be the root element
    * for any changes we might make.
    */
-  Replace.prototype._setupContainer = function() {
+  Sub.prototype._setupContainer = function() {
     var self = this;
     var container = document.getElementById(self.settings.containerId);
     if (!container) {
@@ -267,7 +268,7 @@
    * Run the sentence loop.  If we haven't successfully populated self.actions,
    * we delay the running until we have.
    */
-  Replace.prototype.run = function() {
+  Sub.prototype.run = function() {
     var self = this;
 
     // We haven't finished generating self.actions yet, so delay running
@@ -298,7 +299,7 @@
    *     {
    *       from: ["The", "quick", "brown", "fox", "is", "very", "cool", ",", "supposedly", "."],
    *       to: ["The", "brown", "color", "is", "very", "very", "pretty", ",", "no", "?"],
-   *       replace:[
+   *       sub:[
    *       { fromWord: "fox",        toWord: "color", fromIndex: 3, toIndex: 2 },
    *       { fromWord: "cool",       toWord: "very",  fromIndex: 6, toIndex: 5 },
    *       { fromWord: "supposedly", toWord: "no",    fromIndex: 8, toIndex: 8 },
@@ -322,11 +323,11 @@
    * @returns {object} actions - comamnds to perform
    *   @returns {string[]} actions.from - the from sentence
    *   @returns {string[]} actions.to - the to sentence
-   *   @returns {object[]} actions.replace - replacements to do
-   *     @returns {string} actions.replace.fromWord - word to replace
-   *     @returns {string} actions.replace.toWord - word to replace with
-   *     @returns {int} actions.replace.fromIndex - index of word to replace
-   *     @returns {int} actions.replace.toIndex - index of word to replace with
+   *   @returns {object[]} actions.sub - substitutions to do
+   *     @returns {string} actions.sub.fromWord - word to sub
+   *     @returns {string} actions.sub.toWord - word to sub with
+   *     @returns {int} actions.sub.fromIndex - index of word to sub
+   *     @returns {int} actions.sub.toIndex - index of word to sub with
    *   @returns {object[]} actions.remove - removals to do
    *     @returns {string} actions.remove.fromWord - word to remove
    *     @returns {int} actions.remove.fromIndex - index of word to remove
@@ -339,15 +340,15 @@
    *     @returns {int} actions.keep.fromIndex - index in from of word to keep
    *     @returns {int} actions.keep.toIndex - index in to of word to keep
    *   @returns {int} actions.cost - total cost of action =
-   *                                 removals + replacements + insertions
+   *                                 removals + substitutions + insertions
    */
-  Replace.prototype._computeActionsToChange = function(from, to) {
+  Sub.prototype._computeActionsToChange = function(from, to) {
     var self = this;
     if (self.settings.verbose) { console.log("_computeActionsToChange: ", from, to); }
     var actions = {
       from: from,
       to: to,
-      replace: [],
+      sub: [],
       remove: [],
       insert: [],
       keep: [],
@@ -420,13 +421,13 @@
       if (fromIndex + 1 == from.length) {
         // Can't look ahead, make a move now
         if(foundIndex === -1) {
-          actions.replace.push({
+          actions.sub.push({
             fromWord: from[fromIndex],
             toWord: to[toIndex],
             fromIndex: fromIndex,
             toIndex: toIndex
           });
-          // Replace costs 1
+          // Sub costs 1
           return __computeActionsToCange(fromIndex + 1, toIndex + 1) + 1;
         }
       }
@@ -442,13 +443,13 @@
           // insert costs 1
           return __computeActionsToCange(fromIndex, toIndex + 1) + 1;
         }
-        actions.replace.push({
+        actions.sub.push({
           fromWord: from[fromIndex],
           toWord: to[toIndex],
           fromIndex: fromIndex,
           toIndex: toIndex
         });
-        // replace costs 1
+        // sub costs 1
         return __computeActionsToCange(fromIndex + 1, toIndex + 1) + 1;
       }
 
@@ -475,13 +476,13 @@
       }
 
       if (foundIndex > futureIndex && futureIndex !== -1 ) {
-        actions.replace.push({
+        actions.sub.push({
           fromWord: from[fromIndex],
           toWord: to[toIndex],
           fromIndex: fromIndex,
           toIndex: toIndex
         });
-        // Replace costs 1
+        // Sub costs 1
         return __computeActionsToCange(fromIndex + 1, toIndex + 1) + 1;
       }
 
@@ -516,7 +517,7 @@
    *
    * @param {string[][]} sentences - sentences to be converted to actions
    */
-  Replace.prototype._setSentences = function(sentences) {
+  Sub.prototype._setSentences = function(sentences) {
     var self = this;
     var i, j, prevIndex;
     if (sentences.length === 0) {
@@ -603,7 +604,7 @@
    * and enqueues it onto the end of the self.actions array.
    * Then calls setTimeout on itself, with self.settings.interval.
    */
-  Replace.prototype._sentenceLoop = function() {
+  Sub.prototype._sentenceLoop = function() {
     var self = this;
     var nextAction = self.actions.shift();
     if (!nextAction) {
@@ -619,13 +620,13 @@
   };
 
   /**
-   * Apply `action`, by performing the necessary replacements, removals, keeps,
+   * Apply `action`, by performing the necessary substitutions, removals, keeps,
    * and insertions.
    */
-  Replace.prototype._applyAction = function(action) {
+  Sub.prototype._applyAction = function(action) {
     var self = this;
-    action.replace.map(function(replaceAction) {
-      self._replaceAction(replaceAction);
+    action.sub.map(function(subAction) {
+      self._subAction(subAction);
     });
     action.remove.map(function(removeAction) {
       self._removeAction(removeAction);
@@ -642,7 +643,7 @@
    * @param {Object} removeAction - the removal to perform
    * @param {int} removeAction.fromIndex - the index of the existing word
    */
-  Replace.prototype._removeAction = function(removeAction) {
+  Sub.prototype._removeAction = function(removeAction) {
     var self = this;
     var fromIndexClass = "idx-" + removeAction.fromIndex;
     var animationContext = {
@@ -663,7 +664,7 @@
    * @param {int} insertions.toIndex - the index of the element to add
    * @param {string} insertions.toWord - the word to insert
    */
-  Replace.prototype._performInsertions = function(insertions) {
+  Sub.prototype._performInsertions = function(insertions) {
     var self = this;
     setTimeout(function () {
       insertions.forEach(function(insertAction) {
@@ -695,28 +696,28 @@
   };
 
   /**
-   * Perform the given replacement
+   * Perform the given substitution
    *
-   * @param {Object} replaceAction - the replacement to perform
-   * @param {int} replaceAction.fromIndex - the index of the element to change
-   * @param {string} replaceAction.fromWord - the word to replace
-   * @param {int} replaceAction.toIndex - the index to give the new word
-   * @param {string} replaceAction.toWord - the word to replace with
+   * @param {Object} subAction - the substitution to perform
+   * @param {int} subAction.fromIndex - the index of the element to change
+   * @param {string} subAction.fromWord - the word to sub
+   * @param {int} subAction.toIndex - the index to give the new word
+   * @param {string} subAction.toWord - the word to sub with
    */
-  Replace.prototype._replaceAction = function(replaceAction) {
+  Sub.prototype._subAction = function(subAction) {
     var self = this;
-    var fromIndexClass = "idx-" + replaceAction.fromIndex;
+    var fromIndexClass = "idx-" + subAction.fromIndex;
     var animationContext = {
       fromIndexClass: fromIndexClass,
-      toIndexClass: "idx-" + replaceAction.toIndex,
+      toIndexClass: "idx-" + subAction.toIndex,
       word: document.querySelector(self.wrapperSelector + " ." + fromIndexClass),
       visible: document.querySelector(self.wrapperSelector + " ." + fromIndexClass + self.visibleClass),
       invisible: document.querySelector(self.wrapperSelector + " ." + fromIndexClass + self.invisibleClass),
-      newText: replaceAction.toWord
+      newText: subAction.toWord
     };
-    console.log("REPLACE: ", animationContext);
-    if (self.settings.verbose) { console.log("replace", animationContext); }
-    new Animation("replace", self, animationContext);
+    console.log("SUB: ", animationContext);
+    if (self.settings.verbose) { console.log("sub", animationContext); }
+    new Animation("sub", self, animationContext);
   };
 
   /**
@@ -726,7 +727,7 @@
    * @param {int} keepAction.fromIndex - the index of the word to re-label
    * @param {int} keepAction.toIndex - the index to label this word
    */
-  Replace.prototype._keepAction = function(keepAction) {
+  Sub.prototype._keepAction = function(keepAction) {
     var self = this;
     var fromIndexClass = "idx-" + keepAction.fromIndex;
     var animationContext = {
@@ -750,27 +751,27 @@
    * to have state associated with them, without passing arguments to callback
    * functions.
    *
-   * @param {string} animation - one of "remove", "replace", "insert", or
+   * @param {string} animation - one of "remove", "sub", "insert", or
    *                             "keep".  Indicates the animation to perform,
    *                             and forcasts the contents of animationContext.
-   * @param {Object} replace - the instance of the Replace class associated
+   * @param {Object} sub - the instance of the Sub class associated
    *                           with this animation.
    * @param {Object} animationContext - any context that is needed by the
    *                                    passed animation.
    */
-  function Animation(animation, replace, animationContext) {
+  function Animation(animation, sub, animationContext) {
     var self = this;
-    self.replace = replace;
+    self.sub = sub;
     self.ctx = animationContext;
     self.transitionEnd = _whichTransitionEndEvent();
-    self.animatingClass = " " + self.replace.settings.namespace + "-animating";
+    self.animatingClass = " " + self.sub.settings.namespace + "-animating";
     if (animation === "remove") {
       self.steps = [
         function() {self._fadeOut();},
         function() {self._setWidth();},
         function() {self._removeElement();}
       ];
-    } else if (animation === "replace") {
+    } else if (animation === "sub") {
       self.steps = [
         function() {self._reIndex();},
         function() {self._fadeOut();},
@@ -798,11 +799,11 @@
   Animation.prototype._reIndex = function() {
     var self = this;
     var ctx = self.ctx;
-    if (self.replace.settings.verbose) { console.log("_reIndex"); }
+    if (self.sub.settings.verbose) { console.log("_reIndex"); }
 
-    // Perform replacement if needed
+    // Perform substitution if needed
     console.log("reIndexing ", ctx.word, " from ",  ctx.fromIndexClass, " to ", ctx.toIndexClass);
-    ctx.word.className = ctx.word.className.replace(ctx.fromIndexClass, ctx.toIndexClass);
+    ctx.word.className = ctx.word.className.sub(ctx.fromIndexClass, ctx.toIndexClass);
 
     // run next step if there is one
     self.steps.shift(); // pop _reIndex
@@ -817,7 +818,7 @@
   Animation.prototype._fadeOut = function() {
     var self = this;
     var ctx = self.ctx;
-    if (self.replace.settings.verbose) { console.log("_fadeOut"); }
+    if (self.sub.settings.verbose) { console.log("_fadeOut"); }
 
     /* Hold the containerId width, and fade out */
     ctx.visible.className += self.animatingClass;
@@ -833,17 +834,17 @@
   Animation.prototype._setWidth = function() {
     var self = this;
     var ctx = self.ctx;
-    if (self.replace.settings.verbose) { console.log("_setWidth"); }
+    if (self.sub.settings.verbose) { console.log("_setWidth"); }
     /* Animate the width */
-    ctx.visible.className = ctx.visible.className.replace(self.animatingClass, "");
+    ctx.visible.className = ctx.visible.className.sub(self.animatingClass, "");
     ctx.invisible.className += self.animatingClass;
     ctx.visible.removeEventListener(self.transitionEnd, self.steps[0], false);
     self.steps.shift(); // pop _setWidth
     ctx.invisible.addEventListener(self.transitionEnd, self.steps[0], false);
     var newWidth = self._calculateWordWidth(
       ctx.newText,
-      self.replace.wrapper.tagName,
-      self.replace.wrapper.className.split(" ")
+      self.sub.wrapper.tagName,
+      self.sub.wrapper.className.split(" ")
     );
     setTimeout(function() {
       ctx.invisible.style.width = newWidth + "px";
@@ -856,11 +857,11 @@
   Animation.prototype._removeElement = function() {
     var self = this;
     var ctx = self.ctx;
-    if (self.replace.settings.verbose) { console.log("_removeElement"); }
+    if (self.sub.settings.verbose) { console.log("_removeElement"); }
 
     /* Remove this word */
     ctx.invisible.removeEventListener(self.transitionEnd, self.steps[0], false);
-    self.replace.wrapper.removeChild(ctx.word);
+    self.sub.wrapper.removeChild(ctx.word);
   };
 
   /**
@@ -869,9 +870,9 @@
   Animation.prototype._setTextAndFadeIn = function() {
     var self = this;
     var ctx = self.ctx;
-    if (self.replace.settings.verbose) { console.log("_setTextAndFadeIn"); }
-    /* Replace the text then fade in */
-    ctx.invisible.className = ctx.invisible.className.replace(self.animatingClass, "");
+    if (self.sub.settings.verbose) { console.log("_setTextAndFadeIn"); }
+    /* Sub the text then fade in */
+    ctx.invisible.className = ctx.invisible.className.sub(self.animatingClass, "");
     ctx.visible.className += self.animatingClass;
     ctx.invisible.removeEventListener(self.transitionEnd, self.steps[0], false);
     self.steps.shift(); // pop _setTextAndFadeIn
@@ -887,11 +888,11 @@
   Animation.prototype._cleanUp = function() {
     var self = this;
     var ctx = self.ctx;
-    if (self.replace.settings.verbose) { console.log("_cleanUp"); }
+    if (self.sub.settings.verbose) { console.log("_cleanUp"); }
 
     /* Clean Up */
-    ctx.invisible.className = ctx.invisible.className.replace(self.animatingClass, "");
-    ctx.visible.className = ctx.visible.className.replace(self.animatingClass, "");
+    ctx.invisible.className = ctx.invisible.className.sub(self.animatingClass, "");
+    ctx.visible.className = ctx.visible.className.sub(self.animatingClass, "");
     ctx.visible.removeEventListener(self.transitionEnd, self.steps[0], false);
     ctx.invisible.style.width = "auto";
   };
@@ -909,7 +910,7 @@
     var self = this;
     var elem = document.createElement(tag);
     classes = classes || [];
-    classes.push(self.replace.settings.namespace + "-text-width-calculation");
+    classes.push(self.sub.settings.namespace + "-text-width-calculation");
     elem.setAttribute("class", classes.join(" "));
     elem.innerHTML = text;
     document.body.appendChild(elem);
@@ -919,6 +920,6 @@
     return width;
   };
 
-  window.Replace = Replace;
+  window.Sub = Sub;
 
 }(window));

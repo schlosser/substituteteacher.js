@@ -1,8 +1,8 @@
-/* global getReplaceInstance */
+/* global getSubInstance */
 "use strict";
 
-describe("Replace._computeActionsToChange ", function() {
-	var Replace = getReplaceInstance();
+describe("Sub._computeActionsToChange ", function() {
+	var Sub = getSubInstance();
 
 	var testCases = [
 	{
@@ -12,7 +12,7 @@ describe("Replace._computeActionsToChange ", function() {
 		out: {
 			from: ["very"],
 			to: ["very"],
-			replace:[],
+			sub:[],
 			remove: [],
 			insert: [],
 			keep: [
@@ -21,13 +21,13 @@ describe("Replace._computeActionsToChange ", function() {
 		}
 	},
 	{
-		description: "Replacement costs 1",
+		description: "Subment costs 1",
 		from: ["very"],
 		to: ["quick"],
 		out: {
 			from: ["very"],
 			to: ["quick"],
-			replace:[
+			sub:[
 			{ fromWord: "very", toWord: "quick", fromIndex: 0, toIndex: 0 } ],
 			remove: [],
 			insert: [],
@@ -42,7 +42,7 @@ describe("Replace._computeActionsToChange ", function() {
 		out: {
 			from: [],
 			to: ["cool"],
-			replace:[],
+			sub:[],
 			remove: [],
 			insert: [
 			{ toWord: "cool", toIndex: 0 } ],
@@ -57,7 +57,7 @@ describe("Replace._computeActionsToChange ", function() {
 		out: {
 			from: ["cool"],
 			to: [],
-			replace:[],
+			sub:[],
 			remove: [
 			{ fromWord: "cool", fromIndex: 0 } ],
 			insert: [],
@@ -66,13 +66,13 @@ describe("Replace._computeActionsToChange ", function() {
 		}
 	},
 	{
-		description: "Simple replacement",
+		description: "Simple substitution",
 		from: ["The", "very", "brown", "fox", "is", "very", "cool"],
 		to: ["The", "quick", "brown", "fox", "is", "very", "cool"],
 		out: {
 			from: ["The", "very", "brown", "fox", "is", "very", "cool"],
 			to: ["The", "quick", "brown", "fox", "is", "very", "cool"],
-			replace:[
+			sub:[
 			{ fromWord: "very", toWord: "quick", fromIndex: 1, toIndex: 1 } ],
 			remove: [],
 			insert: [],
@@ -93,7 +93,7 @@ describe("Replace._computeActionsToChange ", function() {
 		out: {
 			from: ["The", "quick", "brown", "fox", "is", "very", "cool"],
 			to: ["The", "very", "brown", "fox", "is", "very", "cool"],
-			replace:[
+			sub:[
 			{ fromWord: "quick", toWord: "very", fromIndex: 1, toIndex: 1 } ],
 			remove: [],
 			insert: [],
@@ -114,7 +114,7 @@ describe("Replace._computeActionsToChange ", function() {
 		out: {
 			from: ["The", "quick", "brown", "fox", "is", "very", "cool", ",", "supposedly", "."],
 			to: ["The", "brown", "color", "is", "very", "very", "pretty", ",", "no", "?"],
-			replace:[
+			sub:[
 			{ fromWord: "fox",        toWord: "color", fromIndex: 3, toIndex: 2 },
 			{ fromWord: "cool",       toWord: "very",  fromIndex: 6, toIndex: 5 },
 			{ fromWord: "supposedly", toWord: "no",    fromIndex: 8, toIndex: 8 },
@@ -135,7 +135,7 @@ describe("Replace._computeActionsToChange ", function() {
 
 	testCases.forEach(function(testCase) {
 		it(testCase.description, function() {
-			expect(Replace._computeActionsToChange(testCase.from,
+			expect(Sub._computeActionsToChange(testCase.from,
 				testCase.to)).toEqual(testCase.out);
 		});
 	});

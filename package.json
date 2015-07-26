@@ -1,8 +1,8 @@
 {
-  "name": "Replace.js",
+  "name": "substituteteacher.js",
   "version": "0.1.0",
-  "description": "A clever way to replace several sentences in a loop.",
-  "repository": "https://github.com/danrschlosser/replace.js",
+  "description": "A clever way to substitute several sentences in a loop.",
+  "repository": "https://github.com/danrschlosser/substituteteacher.js",
   "scripts": {
     "test": "grunt jasmine"
   },

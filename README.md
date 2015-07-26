@@ -1,38 +1,38 @@
-Replace.js
+substituteteacher.js
 ==========
 
-[![Build status](https://travis-ci.org/danrschlosser/replace.js.svg)](https://travis-ci.org/danrschlosser/replace.js)
+[![Build status](https://travis-ci.org/danrschlosser/substituteteacher.js.svg)](https://travis-ci.org/danrschlosser/substituteteacher.js)
 
-Replace.js will rotate through a series of sentences, transitioning between each one.
+substituteteacher.js will rotate through a series of sentences, transitioning between each one.
 
 ## Quick Start
 
-Replace.js is easy to use. Add the script to your page, provide a target container and call `run()`.
+substituteteacher.js is easy to use. Add the script to your page, provide a target container and call `run()`.
 
-#### Step 1: Download
+#### Step 0: Download
 
-[Download the latest release](https://github.com/danrschlosser/replace.js/releases/download/v0.1/replace.min.js) or clone the repo:
+[Download the latest release](https://github.com/danrschlosser/substituteteacher.js/releases/download/v0.1/substituteteacher.min.js) or clone the repo:
 
 ```bash
-$ git clone git@github.com:danrschlosser/replace.js
+$ git clone git@github.com:danrschlosser/substituteteacher.js
+```
+
+#### Step 1: Add the `substituteteacher.min.js` file
+
+```html
+<script src="substituteteacher.min.js"></script>
 ```
 
 #### Step 2: Create your container element
 
 ```html
-<div id="replace"></div>
+<div id="sub">Fallback Text</div>
 ```
 
-#### Step 3: Add the `replace.js` file
-
-```html
-<script src="replace.min.js"></script>
-```
-
-#### Step 4: Init Replace.js
+#### Step 3: Init substituteteacher.js
 
 ```javascript
-var replace = new Replace([
+var sub = new Sub([
     "First sentence.",
     "Second sentence.",
     "How about a third."
@@ -41,21 +41,21 @@ var replace = new Replace([
 
 ## API
 
-### Replace(_sentences_, [_options_])
+### Sub(_sentences_, [_options_])
 
-The `Replace` constructor create a new instance of replacement. The `sentences` parameter should be a list of sentence strings.  Customize the instance by passing the `options` parameter. The example below uses all options and their defaults:
+The `Sub` constructor create a new instance of sub. The `sentences` parameter should be a list of sentence strings.  Customize the instance by passing the `options` parameter. The example below uses all options and their defaults:
 
 ```javascript
 var opts = {
-  containerId: "replace",
-  namespace: "replace",
+  containerId: "sub",
+  namespace: "sub",
   interval: 5000,
   speed: 200,
   verbose: false,
   random: false,
   best: true
 };
-var replace = new Replace([
+var sub = new Sub([
     "First sentence.",
     "Second sentence.",
     "How about a third."
@@ -66,8 +66,8 @@ var replace = new Replace([
 
 | Option | Description | Defualt |
 |--------|-------------|---------|
-| `containerId` | Id of the injection point for HTML | `"replace"`
-| `namespace` | Namespace to prepend to classes used internally | `"replace"`
+| `containerId` | Id of the injection point for HTML | `"sub"`
+| `namespace` | Namespace to prepend to classes used internally | `"sub"`
 | `interval` | Number of milliseconds between each change | `5000`
 | `speed` | Number of milliseconds that each step of the animation should take | `200`
 | `verbose` | True to enable console logging | `false`
