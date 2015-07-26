@@ -4,7 +4,7 @@ layout: default
 <section class="hero">
   <div class="content">
     <h1>substituteteacher.js</h1>
-    <h2 id="replace">A JavaScript library for sweet taglines.</h2>
+    <h2 id="sub">A JavaScript library for sweet taglines.</h2>
   </div>
 </section>
 <section>
@@ -13,14 +13,14 @@ layout: default
 {% highlight html %}
 
 <!-- Step 1: Add the substituteteacher.js file -->
-<script src="replace.min.js"></script>
+<script src="substituteteacher.min.js"></script>
 
 <!-- Step 2: Add the substituteteacher.js file -->
-<div id="replace">Fallback text.</div>
+<div id="sub">Fallback text.</div>
 
 <!-- Step 3: Init substituteteacher.js -->
 <script type="text/javascript">
-  var replace = new Replace([
+  var sub = new Sub([
       "First sentence.",
       "Second sentence.",
       "How about a third."
@@ -32,21 +32,21 @@ layout: default
 <section>
   <div class="content">
     <h3><span class="purple">API</span></h3>
-    <h5><span class="purple"><code>Replace(<span class="keyword">sentences</span>, [<span class="keyword">options</span>])</code></span></h5>
+    <h5><span class="purple"><code>Sub(<span class="keyword">sentences</span>, [<span class="keyword">options</span>])</code></span></h5>
 
-    <p>The <code>Replace</code> constructor create a new instance of replacement. The sentences parameter should be a list of sentence strings. Customize the instance by passing the options parameter. The example below uses all options and their defaults:</p>
+    <p>The <code>Sub</code> constructor create a new instance of substitution. The sentences parameter should be a list of sentence strings. Customize the instance by passing the options parameter. The example below uses all options and their defaults:</p>
 
 {% highlight js %}
 var opts = {
-  containerId: "replace",
-  namespace: "replace",
+  containerId: "sub",
+  namespace: "sub",
   interval: 5000,
   speed: 200,
   verbose: false,
   random: false,
   best: true
 };
-var replace = new Replace([
+var sub = new Sub([
     "First sentence.",
     "Second sentence.",
     "How about a third."
@@ -67,12 +67,12 @@ var replace = new Replace([
           <tr>
           <td><code>containerId</code></td>
           <td>Id of the injection point for HTML</td>
-          <td><code>"replace"</code></td>
+          <td><code>"sub"</code></td>
           </tr>
           <tr>
             <td><code>namespace</code></td>
             <td>Namespace to prepend to classes used internally</td>
-            <td><code>"replace"</code></td>
+            <td><code>"sub"</code></td>
           </tr>
           <tr>
             <td><code>interval</code></td>
@@ -108,22 +108,22 @@ var replace = new Replace([
   </div>
 </section>
 
-<script src="src/replace.min.js"></script>
+<script src="src/substituteteacher.min.js"></script>
 <script type="text/javascript">
   var opts = {
-    containerId: "replace",
-    namespace: "replace",
+    containerId: "sub",
+    namespace: "sub",
     interval: 5000,
     speed: 200,
     verbose: false,
     random: false,
     best: true
   };
-  var replace = new Replace([
+  var sub = new Sub([
       "A daring JavaScript library for subsitute teachers",
       "A hilarious JavaScript library for awesome taglines",
       "A svelt JavaScript library for sweet taglines",
       "A badass JavaScript library for sliding fun",
-      "A JavaScript library for word replacement",
+      "A JavaScript library for word substitution",
   ], opts).run();
 </script>
