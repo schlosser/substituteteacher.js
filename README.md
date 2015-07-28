@@ -80,5 +80,5 @@ var sub = new Sub([
 
 Starts the rotation between sentences.
 
-[download]: https://github.com/danrschlosser/substituteteacher.js/releases/download/v0.2/substituteteacher.min.js
+[download]: https://github.com/danrschlosser/substituteteacher.js/releases/download/v0.3/substituteteacher.min.js
 [sub]: http://danrschlosser.github.io/substituteteacher.js/
