@@ -51,15 +51,23 @@
        *   -#$%^&_`~'
        */
       if (endChar.match(/[\.,"\/!\?\*\+;:{}=()\[\]\s]/g)) {
-        // Append the word we"ve been building
+        // Append the word we've been building
         if (end > start) {
-          components.push(rawSentence.slice(start, end));
+          if (endChar.match(/\s/g)) {
+            components.push(rawSentence.slice(start, end) + "&nbsp;");
+          } else {
+            components.push(rawSentence.slice(start, end));
+          }
         }
 
         // If the character is not whitespace, then it is a special character
         // and should be split off into its own string
         if (!endChar.match(/\s/g)) {
-          components.push(endChar);
+          if (end +1 < rawSentence.length && rawSentence.charAt(end + 1).match(/\s/g)) {
+            components.push(endChar + "&nbsp;");
+          } else {
+            components.push(endChar);
+          }
         }
 
         // The start of the next word is the next character to be seen.
@@ -107,10 +115,10 @@
    */
   function _wordTemplate(namespace, idx) {
     return (
-      "<div class=\"idx-" + idx + " " + namespace + "-word\">" +
+      "<div class=\"" + namespace + "-to-idx-" + idx + " " + namespace + "-word\">" +
       "<span class=\"" + namespace + "-visible\" style=\"opacity: 0\"></span>" +
       "<span class=\"" + namespace + "-invisible\" style=\"width: 0px\"></span>" +
-      "<span>&nbsp;</span>" +
+      // "<span>&nbsp;</span>" +
       "</div>"
     );
   }
@@ -228,6 +236,8 @@
     self.actions = [];
     self.invisibleClass = " ." + self.settings.namespace + "-invisible";
     self.visibleClass = " ." + self.settings.namespace + "-visible";
+    self.fromClass = self.settings.namespace + "-from-idx-";
+    self.toClass = self.settings.namespace + "-to-idx-";
     self.wrapperSelector = "#" + self.settings.namespace;
     self._setupContainer();
     if (!self.settings._testing) {
@@ -625,6 +635,11 @@
    */
   Sub.prototype._applyAction = function(action) {
     var self = this;
+    var words = document.getElementsByClassName(self.settings.namespace + '-word');
+    [].forEach.call(words, function(elem) {
+      if (self.settings.verbose) { console.log('replacing to- with from- for:', elem)}
+      elem.className = elem.className.replace(self.toClass, self.fromClass);
+    });
     action.sub.map(function(subAction) {
       self._subAction(subAction);
     });
@@ -645,7 +660,7 @@
    */
   Sub.prototype._removeAction = function(removeAction) {
     var self = this;
-    var fromIndexClass = "idx-" + removeAction.fromIndex;
+    var fromIndexClass = self.fromClass + removeAction.fromIndex;
     var animationContext = {
       fromIndexClass: fromIndexClass,
       word: document.querySelector(self.wrapperSelector + " ." + fromIndexClass),
@@ -674,13 +689,13 @@
         if (insertAction.toIndex === 0) {
           self.wrapper.insertAdjacentHTML("afterbegin", html);
         } else {
-          var selector = self.wrapperSelector + " .idx-" + (insertAction.toIndex - 1);
+          var selector = self.wrapperSelector + " ." + self.toClass + (insertAction.toIndex - 1);
           var prevSibling = document.querySelector(selector);
           prevSibling.insertAdjacentHTML("afterend", html);
         }
 
         /*  Startup animations */
-        var toIndexClass = "idx-" + insertAction.toIndex;
+        var toIndexClass = self.toClass + insertAction.toIndex;
         var animationContext = {
           toIndexClass: toIndexClass,
           word: document.querySelector(self.wrapperSelector + " ." + toIndexClass),
@@ -706,16 +721,15 @@
    */
   Sub.prototype._subAction = function(subAction) {
     var self = this;
-    var fromIndexClass = "idx-" + subAction.fromIndex;
+    var fromIndexClass = self.fromClass + subAction.fromIndex;
     var animationContext = {
       fromIndexClass: fromIndexClass,
-      toIndexClass: "idx-" + subAction.toIndex,
+      toIndexClass: self.toClass + subAction.toIndex,
       word: document.querySelector(self.wrapperSelector + " ." + fromIndexClass),
       visible: document.querySelector(self.wrapperSelector + " ." + fromIndexClass + self.visibleClass),
       invisible: document.querySelector(self.wrapperSelector + " ." + fromIndexClass + self.invisibleClass),
       newText: subAction.toWord
     };
-    console.log("SUB: ", animationContext);
     if (self.settings.verbose) { console.log("sub", animationContext); }
     new Animation("sub", self, animationContext);
   };
@@ -729,10 +743,10 @@
    */
   Sub.prototype._keepAction = function(keepAction) {
     var self = this;
-    var fromIndexClass = "idx-" + keepAction.fromIndex;
+    var fromIndexClass = self.fromClass + keepAction.fromIndex;
     var animationContext = {
       fromIndexClass: fromIndexClass,
-      toIndexClass: "idx-" + keepAction.toIndex,
+      toIndexClass: self.toClass + keepAction.toIndex,
       word: document.querySelector(self.wrapperSelector + " ." + fromIndexClass),
     };
 
@@ -799,10 +813,10 @@
   Animation.prototype._reIndex = function() {
     var self = this;
     var ctx = self.ctx;
-    if (self.sub.settings.verbose) { console.log("_reIndex"); }
+    // if (self.sub.settings.verbose) { console.log("_reIndex"); }
 
     // Perform substitution if needed
-    console.log("reIndexing ", ctx.word, " from ",  ctx.fromIndexClass, " to ", ctx.toIndexClass);
+    if (self.sub.settings.verbose) {console.log("_reIndex ", ctx.word.innerText, " from ",  ctx.fromIndexClass, " to ", ctx.toIndexClass); }
     ctx.word.className = ctx.word.className.replace(ctx.fromIndexClass, ctx.toIndexClass);
 
     // run next step if there is one
