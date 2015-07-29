@@ -23,9 +23,11 @@ layout: default
 <!-- Step 3: Init substituteteacher.js -->
 <script type="text/javascript">
   var sub = new Sub([
-      "First sentence.",
-      "Second sentence.",
-      "How about a third."
+      "A daring JavaScript library for subsitute teachers",
+      "A hilarious JavaScript library for awesome taglines",
+      "A svelt JavaScript library for sweet taglines",
+      "A badass JavaScript library for sliding fun",
+      "A JavaScript library for word substitution"
   ]).run();
 </script>
 {% endhighlight %}
@@ -49,9 +51,11 @@ var opts = {
   best: true
 };
 var sub = new Sub([
-    "First sentence.",
-    "Second sentence.",
-    "How about a third."
+    "A daring JavaScript library for subsitute teachers",
+    "A hilarious JavaScript library for awesome taglines",
+    "A svelt JavaScript library for sweet taglines",
+    "A badass JavaScript library for sliding fun",
+    "A JavaScript library for word substitution"
 ], opts).run();
 {% endhighlight %}
     <h5><span class="purple">Options</span></h5>
@@ -118,5 +122,7 @@ var sub = new Sub([
       "A svelt JavaScript library for sweet taglines",
       "A badass JavaScript library for sliding fun",
       "A JavaScript library for word substitution",
-  ]).run();
+  ], {
+    interval: 2000
+  }).run();
 </script>
