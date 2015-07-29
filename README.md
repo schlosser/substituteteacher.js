@@ -35,9 +35,11 @@ $ git clone git@github.com:danrschlosser/substituteteacher.js
 
 ```javascript
 var sub = new Sub([
-    "First sentence.",
-    "Second sentence.",
-    "How about a third."
+    "A daring JavaScript library for subsitute teachers",
+    "A hilarious JavaScript library for awesome taglines",
+    "A svelt JavaScript library for sweet taglines",
+    "A badass JavaScript library for sliding fun",
+    "A JavaScript library for word substitution"
 ]).run();
 ```
 
@@ -58,9 +60,11 @@ var opts = {
   best: true
 };
 var sub = new Sub([
-    "First sentence.",
-    "Second sentence.",
-    "How about a third."
+    "A daring JavaScript library for subsitute teachers",
+    "A hilarious JavaScript library for awesome taglines",
+    "A svelt JavaScript library for sweet taglines",
+    "A badass JavaScript library for sliding fun",
+    "A JavaScript library for word substitution"
 ], opts).run();
 ```
 
