@@ -37,7 +37,7 @@ $ git clone git@github.com:danrschlosser/substituteteacher.js
 var sub = new Sub([
     "A daring JavaScript library for subsitute teachers",
     "A hilarious JavaScript library for awesome taglines",
-    "A svelt JavaScript library for sweet taglines",
+    "A svelte JavaScript library for sweet taglines",
     "A badass JavaScript library for sliding fun",
     "A JavaScript library for word substitution"
 ]).run();
@@ -62,7 +62,7 @@ var opts = {
 var sub = new Sub([
     "A daring JavaScript library for subsitute teachers",
     "A hilarious JavaScript library for awesome taglines",
-    "A svelt JavaScript library for sweet taglines",
+    "A svelte JavaScript library for sweet taglines",
     "A badass JavaScript library for sliding fun",
     "A JavaScript library for word substitution"
 ], opts).run();
