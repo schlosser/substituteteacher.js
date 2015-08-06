@@ -11,12 +11,12 @@ substituteteacher.js ([demo][sub])
 
 `substituteteacher.js` is easy to use. Add the script to your page, provide a target container and call `run()`.
 
-#### Step 0: Download
+#### Step 0: Install
 
-[Download the latest release][download] or clone the repo:
+[Download the latest release][download] or install from npm:
 
 ```bash
-$ git clone git@github.com:danrschlosser/substituteteacher.js
+npm install substituteteacher.js --save-dev
 ```
 
 #### Step 1: Add the `substituteteacher.min.js` file
