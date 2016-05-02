@@ -1,7 +1,7 @@
 substituteteacher.js ([demo][sub])
 ===========================
 
-[![Build status](https://travis-ci.org/danrschlosser/substituteteacher.js.svg)](https://travis-ci.org/danrschlosser/substituteteacher.js)
+[![Build status](https://travis-ci.org/schlosser/substituteteacher.js.svg)](https://travis-ci.org/schlosser/substituteteacher.js)
 
 [![Substitute Teacher](http://static.schlosser.io/ss/sub/sub.gif)][sub]
 
@@ -84,5 +84,5 @@ var sub = new Sub([
 
 Starts the rotation between sentences.
 
-[download]: https://github.com/danrschlosser/substituteteacher.js/releases/download/v0.3/substituteteacher.min.js
-[sub]: http://danrschlosser.github.io/substituteteacher.js/
+[download]: https://github.com/schlosser/substituteteacher.js/releases/download/v0.3/substituteteacher.min.js
+[sub]: http://schlosser.github.io/substituteteacher.js/
