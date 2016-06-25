@@ -118,7 +118,6 @@
       "<div class=\"" + namespace + "-to-idx-" + idx + " " + namespace + "-word\">" +
       "<span class=\"" + namespace + "-visible\" style=\"opacity: 0\"></span>" +
       "<span class=\"" + namespace + "-invisible\" style=\"width: 0px\"></span>" +
-      // "<span>&nbsp;</span>" +
       "</div>"
     );
   }
@@ -131,29 +130,57 @@
    * @param {number} transitionSpeed - the speed for CSS transitions.
    * @param {number} height - the outerHeight of the wrapper.
    */
-  function _injectStyle(namespace, transitionSpeed, height) {
+  function _injectStyle(namespace, transitionSpeed, height, fontFamily) {
     var css =
+      "@font-face {\n" +
+      "    font-family: " + namespace + "-empty;\n" +
+      "    src: url(data:application/font-woff;charset=utf-8;base64,d09GRk9UVE8AAAQ0AAoAAAAAA+wAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABDRkYgAAAA9AAAAJ4AAACeXQ48j09TLzIAAAGUAAAAYAAAAGAIIgbWY21hcAAAAfQAAABEAAAARAAyAGlnYXNwAAACOAAAAAgAAAAIAAAAEGhlYWQAAAJAAAAANgAAADb9mzB5aGhlYQAAAngAAAAkAAAAJAHiAeVobXR4AAACnAAAABAAAAAQAAAAAG1heHAAAAKsAAAABgAAAAYABFAAbmFtZQAAArQAAAFdAAABXVqZXRlwb3N0AAAEFAAAACAAAAAgAAMAAAEABAQAAQEBDHNwYWNlLWVtcHR5AAECAAEAOvgcAvgbA/gYBB4KABlT/4uLHgoAGVP/i4sMB4tr+JT4dAUdAAAAfA8dAAAAgREdAAAACR0AAACVEgAFAQEMFxkbHnNwYWNlLWVtcHR5c3BhY2UtZW1wdHl1MHUxdTIwAAACAYkAAgAEAQEEBwoN/JQO/JQO/JQO/JQO+JQU+JQViwwKAAAAAwIAAZAABQAAAUwBZgAAAEcBTAFmAAAA9QAZAIQAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAABAAAAAIAHg/+D/4AHgACAAAAABAAAAAAAAAAAAAAAgAAAAAAACAAAAAwAAABQAAwABAAAAFAAEADAAAAAIAAgAAgAAAAEAIP/9//8AAAAAACD//f//AAH/4wADAAEAAAAAAAAAAAABAAH//wAPAAEAAAABAAAAeR2GXw889QALAgAAAAAAzz54vgAAAADPPni+AAAAAAAAAAAAAAAIAAIAAAAAAAAAAQAAAeD/4AAAAgAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAABQAAAEAAAAAAAOAK4AAQAAAAAAAQAWAAAAAQAAAAAAAgAOAGMAAQAAAAAAAwAWACwAAQAAAAAABAAWAHEAAQAAAAAABQAWABYAAQAAAAAABgALAEIAAQAAAAAACgAoAIcAAwABBAkAAQAWAAAAAwABBAkAAgAOAGMAAwABBAkAAwAWACwAAwABBAkABAAWAHEAAwABBAkABQAWABYAAwABBAkABgAWAE0AAwABBAkACgAoAIcAcwBwAGEAYwBlAC0AZQBtAHAAdAB5AFYAZQByAHMAaQBvAG4AIAAxAC4AMABzAHAAYQBjAGUALQBlAG0AcAB0AHlzcGFjZS1lbXB0eQBzAHAAYQBjAGUALQBlAG0AcAB0AHkAUgBlAGcAdQBsAGEAcgBzAHAAYQBjAGUALQBlAG0AcAB0AHkARwBlAG4AZQByAGEAdABlAGQAIABiAHkAIABJAGMAbwBNAG8AbwBuAAAAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=) format('woff');\n" +
+      "}\n" +
       "." + namespace + "-invisible { visibility: hidden; }\n" +
       "." + namespace + "-animating {\n" +
       "  -webkit-transition: " + transitionSpeed + "s all linear;\n" +
       "  -moz-transition: " + transitionSpeed + "s all linear;\n" +
       "  -o-transition: " + transitionSpeed + "s all linear;\n" +
       "  transition: " + transitionSpeed + "s all linear; }\n" +
+      "." + namespace + " {\n" +
+      "  position: relative;\n" +
+      "  font-family: " + namespace + "-empty;\n" +
+      "  margin: 0;}\n" +
+      "." + namespace + ":after {\n" +
+      "  content: ' ';\n" +
+      "  display: block;\n" +
+      "  clear: both;}\n" +
       "." + namespace + "-text-width-calculation {\n" +
       "  position: absolute;\n" +
       "  visibility: hidden;\n" +
+      "  font-family: " + fontFamily + ";\n" +
       "  height: auto;\n" +
       "  width: auto;\n" +
       "  display: inline-block;\n" +
-      "  white-space: nowrap; }" +
-      "." + namespace + " {\n" +
-      "  margin: 0;}\n" +
+      "  white-space: nowrap; }\n" +
+      "  ." + namespace + " ." + namespace + "-old-content {\n" +
+      "    font-family: " + fontFamily + ";\n" +
+      "    position: absolute;\n" +
+      "    left: 0;\n" +
+      "    width: 100%;\n" +
+      "    top: 0;\n" +
+      "    height: 100%;\n" +
+      "  }\n" +
+      "  ." + namespace + "." + namespace + "-loaded ." + namespace + "-old-content {" +
+      "    display: none;" +
+      "  }\n" +
+      "  ." + namespace + "." + namespace + "-loaded ." + namespace + "-word {" +
+      "    opacity: 1;" +
+      "  }\n" +
       "  ." + namespace + " ." + namespace + "-punctuation { margin-left: -0.3rem; }\n" +
       "  ." + namespace + " ." + namespace + "-word {\n" +
-      "    display: inline;\n" +
+      "    display: inline-block;\n" +
       "    position: relative;\n" +
+      "    float: left;\n" +
+      "    opacity: 0;\n" +
+      "    font-family: " + fontFamily + ";\n" +
       "    text-align: center;\n" +
-      "    height: " + height + "px;\n" +
+      "    height: " + height + ";\n" +
       "    white-space: nowrap;\n" +
       "    overflow: hidden;}\n" +
       "    ." + namespace + " ." + namespace + "-word span {\n" +
@@ -165,8 +192,8 @@
       "      display: inline-block;}\n" +
       "      ." + namespace + " ." + namespace + "-word ." + namespace + "-visible {\n" +
       "        position: absolute;\n" +
-      "        display: inline;\n" +
-      "        height: " + height + "px;\n" +
+      "        display: inline-block;\n" +
+      "        height: " + height + ";\n" +
       "        top: 0;\n" +
       "        bottom: 0;\n" +
       "        right:0;\n" +
@@ -213,6 +240,18 @@
    * @param {bool} options.best - true if the sentences should be ordered to
    *                              minimize the number of changes performed
    *                              default: true
+   * @param {bool} options.mobileWidth - if defined, the sentence loop will stop
+   *                                     at screen sizes smaller than the width.
+   *                                     defulat: null
+   * @param {bool} options.clearOriginalContent - true if the contents of the
+   *                                              container should be removed
+   *                                              before we inject our elements.
+   *                                              If it is set to false, the
+   *                                              original content will remain
+   *                                              until after the first sentence
+   *                                              is inserted, at which time it
+   *                                              will be hidden
+   *                                              default: true
    * @param {bool} options._testing - true if testing.  sentences will be
    *                                  ignored
    */
@@ -224,13 +263,22 @@
       namespace: opts.namespace || "sub",
       interval: opts.interval || 5000,
       speed: opts.speed || 200,
+      mobileWidth: opts.mobileWidth || null,
       verbose: (opts.verbose !== undefined) ? opts.verbose : false,
       random: (opts.random !== undefined) ? opts.random : false,
       best: (opts.best !== undefined) ? opts.best : true,
+      clearOriginalContent: (opts.clearOriginalContent !== undefined) ? opts.clearOriginalContent : true,
       _testing: (opts._testing !== undefined) ? opts._testing : false,
     };
     self.wrapper = document.getElementById(self.settings.containerId);
-    _injectStyle(self.settings.namespace, self.settings.speed / 1000, self.wrapper.offsetHeight);
+    var wrapperStyle = window.getComputedStyle(self.wrapper);
+
+    _injectStyle(
+      self.settings.namespace,
+      self.settings.speed / 1000,
+      wrapperStyle.height,
+      wrapperStyle.fontFamily);
+
     self.highestTimeoutId = 0;
     self.currentState = null;
     self.actions = [];
@@ -239,11 +287,13 @@
     self.fromClass = self.settings.namespace + "-from-idx-";
     self.toClass = self.settings.namespace + "-to-idx-";
     self.wrapperSelector = "#" + self.settings.namespace;
+    self.isEmpty = true;
+
     self._setupContainer();
     if (!self.settings._testing) {
       self._setSentences(self._parseSentences(rawSentences));
     }
-    return this;
+    return self;
   }
 
   /**
@@ -270,15 +320,47 @@
     if (!container) {
       throw "Cannot find element with id:" + self.settings.containerId;
     }
-    container.innerHTML = "";
+    var originalStyle = window.getComputedStyle(container);
+    container.style.height = originalStyle.height;
+    if (self.settings.clearOriginalContent) {
+      container.innerHTML = '';
+    } else {
+      container.style.width = originalStyle.width;
+      container.innerHTML = '<span class="' + self.settings.namespace + '-old-content">' + container.innerHTML.replace(' ', '&nbsp;') + '</span>';
+    }
     container.className = self.settings.namespace;
   };
+
+  Sub.prototype._getOnResize = function() {
+    var self = this;
+    self.isStopped = false;
+    var onResize = function(e) {
+      self.lastWindowWidth = window.innerWidth;
+
+      // Disable on small screens, if that parameter is provided.
+      if (self.settings.mobileWidth !== null) {
+        if (!self.isStopped && self.lastWindowWidth < self.settings.mobileWidth) {
+          // stop on small screens
+          self._stop();
+          self.isStopped = true;
+        } else
+        if (self.isStopped && self.lastWindowWidth > self.settings.mobileWidth) {
+          // start up again
+          self._run();
+          self.isStopped = false;
+        }
+      }
+    };
+    return onResize;
+  }
 
   /**
    * Run the sentence loop.  If we haven't successfully populated self.actions,
    * we delay the running until we have.
+   *
+   * This function should only be called internally.
    */
-  Sub.prototype.run = function() {
+  Sub.prototype._run = function() {
     var self = this;
 
     // We haven't finished generating self.actions yet, so delay running
@@ -286,18 +368,66 @@
       setTimeout(function() {
         self.run();
       }, 20);
+      return;
     }
 
-    var action = self._computeActionsToChange([], self.actions[0].from);
-    if (!action) {
-      console.log(action);
-      throw "returned null action";
+    if (self.isEmpty) {
+      self.isEmpty = false;
+      var action = self._computeActionsToChange([], self.actions[0].from);
+      if (!action) {
+        console.log(action);
+        throw "returned null action";
+      }
+      self._applyAction(action);
     }
-    self._applyAction(action);
     self.highestTimeoutId = setTimeout(function() {
+      self.wrapper.className += ' ' + self.settings.namespace + '-loaded';
+      self.wrapper.style.height = '';
       self._sentenceLoop();
     }, self.settings.interval);
+  }
+
+  /**
+   * Run the sentence loop and add resize handlers. If we haven't successfully
+   * populated self.actions, we delay the running until we have.
+   */
+  Sub.prototype.run = function() {
+    var self = this;
+
+    self.onResize = self._getOnResize();
+    window.addEventListener('resize', self.onResize, false);
+    window.addEventListener('orientationchange', self.onResize, false);
+
+    self._run();
+
+    return self;
   };
+
+  /**
+   * Stop the sentence loop. This will stop all animations.
+   *
+   * This function should only be called internally.
+   */
+  Sub.prototype._stop = function() {
+    var self = this;
+
+    clearTimeout(self.highestTimeoutId);
+  }
+
+  /**
+   * Stop the sentence loop. This will stop all animations and remove event
+   * listeners.
+   */
+  Sub.prototype.stop = function() {
+    var self = this;
+
+    window.removeEventListener('resize', self.onResize, false);
+    window.removeEventListener('orientationchange', self.onResize, false);
+
+    self._stop();
+
+    return self;
+  }
 
   /**
    * Compute the actions required to transform `from` into `to`.
@@ -802,7 +932,7 @@
         function() {self._reIndex();}
       ];
     } else {
-      console.log("Unknown animation: ", animation);
+      console.error("Unknown animation: ", animation);
     }
     self.steps[0](); // dequeue an run the first task.
   }

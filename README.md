@@ -55,9 +55,11 @@ var opts = {
   namespace: "sub",
   interval: 5000,
   speed: 200,
+  mobileWidth: null,
   verbose: false,
   random: false,
-  best: true
+  best: true,
+  clearOriginalContent: true,
 };
 var sub = new Sub([
     "A daring JavaScript library for subsitute teachers",
@@ -76,13 +78,17 @@ var sub = new Sub([
 | `namespace` | Namespace to prepend to classes used internally | `"sub"`
 | `interval` | Number of milliseconds between each change | `5000`
 | `speed` | Number of milliseconds that each step of the animation should take | `200`
+| `mobileWidth` | If defined, the minimum screen size at which to enable the library | `null` 
 | `verbose` | True to enable console logging | `false`
 | `random` | True if the first sentence to appear should be random | `false`
 | `best` | True if the sentences should be ordered to minimize the number of changes performed | `true`
+| `clearOriginalContent` | True to empty out container and fade in the substitute teacher, false to seemlessly transition from the original content to the first item. This only works if `random` is `false` | `true`
 
 ### run()
 
-Starts the rotation between sentences.
+Starts the rotation between sentences, and attaches resize handlers (for disabling the library on small screens if `mobileWidth` is defined).
 
-[download]: https://github.com/schlosser/substituteteacher.js/releases/download/v0.3/substituteteacher.min.js
+Stops the rotation between sentences, and remove resize handlers.
+
+[download]: https://github.com/schlosser/substituteteacher.js/releases/download/v0.4/substituteteacher.min.js
 [sub]: http://schlosser.github.io/substituteteacher.js/

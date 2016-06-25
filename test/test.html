@@ -4,18 +4,27 @@
 	<meta charset="utf-8">
 	<title></title>
 	<script type="text/javascript" src="../src/substituteteacher.js"></script>
+    <style>
+        h2 {
+            font-family: monospace;
+        }
+    </style>
 </head>
 <body>
 	<h1>test</h1>
-	<h2 id="sub">Javascript is Disabled</h2>
+	<h2 id="sub">A daring JavaScript library for subsitute teachers</h2>
 	<script type="text/javascript">
-	new Sub([
+	var sub = new Sub([
       "A daring JavaScript library for subsitute teachers",
       "A hilarious JavaScript library for awesome taglines",
       "A sveltee JavaScript library for sweet taglines",
       "A badass JavaScript library for sliding fun",
       "A JavaScript library for word substitution",
-  	], {verbose: true}).run();
+  	], {
+        verbose: true,
+        clearOriginalContent: false,
+    }).run();
 	</script>
+    <h1>More Content</h1>
 </body>
 </html>
