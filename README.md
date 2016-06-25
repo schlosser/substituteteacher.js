@@ -16,7 +16,7 @@ substituteteacher.js ([demo][sub])
 [Download the latest release][download] or install from npm:
 
 ```bash
-npm install substituteteacher.js --save-dev
+npm install substitute-teacher --save-dev
 ```
 
 #### Step 1: Add the `substituteteacher.min.js` file
