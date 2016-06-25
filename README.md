@@ -88,6 +88,8 @@ var sub = new Sub([
 
 Starts the rotation between sentences, and attaches resize handlers (for disabling the library on small screens if `mobileWidth` is defined).
 
+### stop()
+
 Stops the rotation between sentences, and remove resize handlers.
 
 [download]: https://github.com/schlosser/substituteteacher.js/releases/download/v0.4/substituteteacher.min.js
