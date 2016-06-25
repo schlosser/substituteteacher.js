@@ -4,7 +4,7 @@ layout: default
 <section class="hero">
   <div class="content">
     <h1>substituteteacher.js</h1>
-    <h2 id="sub">A JavaScript library for sweet taglines.</h2>
+    <h2 id="sub">A daring JavaScript library for subsitute teachers.</h2>
   </div>
 </section>
 <section>
@@ -54,9 +54,11 @@ var opts = {
   namespace: "sub",
   interval: 5000,
   speed: 200,
+  mobileWidth: null
   verbose: false,
   random: false,
-  best: true
+  best: true,
+  clearOriginalContent: true
 };
 var sub = new Sub([
     "A daring JavaScript library for subsitute teachers",
@@ -99,6 +101,11 @@ var sub = new Sub([
             <td><code>200</code></td>
           </tr>
           <tr>
+            <td><code>mobileWidth</code></td>
+            <td>If defined, the minimum screen size at which to enable the library</td>
+            <td><code>null</code></td>
+          </tr>
+          <tr>
             <td><code>verbose</code></td>
             <td>True to enable console logging</td>
             <td><code>false</code></td>
@@ -113,24 +120,34 @@ var sub = new Sub([
             <td>True if the sentences should be ordered to minimize the number of changes performed</td>
             <td><code>true</code></td>
           </tr>
+          <tr>
+            <td><code>clearOriginalContent</code></td>
+            <td>True to empty out container and fade in the substitute teacher, false to seemlessly transition from the original content to the first item. This only works if random is <code>false</code></td>
+            <td><code>true</code></td>
+          </tr>
         </tbody>
       </table>
     </div>
     <h5><span class="purple">run()</span></h5>
 
-    <p>Starts the rotation between sentences.</p>
+    <p>Starts the rotation between sentences, and attaches resize handlers (for disabling the library on small screens if <code>mobileWidth</code> is defined).</p>
+
+    <h5><span class="purple">stop()</span></h5>
+
+    <p>Stops the rotation between sentences, and remove resize handlers.</p>
   </div>
 </section>
 
 <script src="src/substituteteacher.min.js"></script>
 <script type="text/javascript">
-  new Sub([
+  var sub = new Sub([
       "A daring JavaScript library for subsitute teachers",
       "A hilarious JavaScript library for awesome taglines",
       "A svelte JavaScript library for sweet taglines",
       "A badass JavaScript library for sliding fun",
       "A JavaScript library for word substitution",
   ], {
-    interval: 2000
+    interval: 2000,
+    clearOriginalContent: false,
   }).run();
 </script>
